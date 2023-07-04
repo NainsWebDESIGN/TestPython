@@ -340,13 +340,120 @@
 # b = random.randint(10, 50) # 在自定義範圍內隨機抽選一個數字
 # print(b)
 
-import random
-import string
+# import random
+# import string
+#
+# 數字 = string.digits  # digits可產生0到9的數字
+# 英文 = string.ascii_letters  # ascii_letters可產生英文大小寫的字母
+# 字母表 = list(數字 + 英文)
+# random.shuffle(字母表)
+# 長度 = int(input("你的密碼要幾位數? "))
+# 密碼 = "".join(字母表[: 長度])
+# print(f"您的密碼為: {密碼}")
 
-數字 = string.digits  # digits可產生0到9的數字
-英文 = string.ascii_letters  # ascii_letters可產生英文大小寫的字母
-字母表 = list(數字 + 英文)
-random.shuffle(字母表)
-長度 = int(input("你的密碼要幾位數? "))
-密碼 = "".join(字母表[: 長度])
-print(f"您的密碼為: {密碼}")
+# import requests
+# 城市 = input("請輸入要查詢城市名稱: ")
+# API = "313f95ca0c819881fd7ed8b662a38abd"
+# 網站 = f"https://api.openweathermap.org/data/2.5/weather?q={城市}&appid={API}"
+# 天氣資料 = requests.get(網站)
+# 氣溫 = int(天氣資料.json()["main"]["temp"] - 273.15)
+# 天氣 = 天氣資料.json()["weather"][0]["main"]
+# 濕度 = 天氣資料.json()["main"]["humidity"]
+# 風速 = 天氣資料.json()["wind"]["speed"]
+# print(f"{城市}目前的氣溫為{氣溫}")
+# print(f"天氣: {天氣}")
+# print(f"濕度: {濕度}%")
+# print(f"風速: {風速} (單位：米/秒)")
+
+### 第十集
+# class 遊戲角色:
+#     等級 = 1
+#     經驗值 = 0
+#     def __init__(self, 姓名, 年齡):
+#         self.姓名 = 姓名
+#         self.年齡 = 年齡
+#     def 衝鋒(self):
+#         print(f"{self.姓名}一個箭步衝向了敵人!")
+#     def 洞察(self):
+#         print(f"{self.姓名}用敏銳眼光環顧著四周")
+#
+# class 戰士(遊戲角色):
+#     def 攻擊(self):
+#         print(f"{self.姓名}使出突刺攻擊!")
+#
+# 玩家1 = 戰士("小明", 24)
+# 玩家2 = 遊戲角色("小華", 22)
+# 玩家1.攻擊()
+# 玩家1.洞察()
+# 玩家2.衝鋒()
+
+import random
+class 遊戲角色:
+    生命 = 500
+    def __init__(self, 姓名):
+        self.姓名 = 姓名
+
+    def 防禦(self, 指令):
+        if 指令 == 1:
+            print(f"{self.姓名}成功格擋 ~")
+            return 0.5
+        elif 指令 == 2:
+            閃避機率 = random.choice([0, 1])
+            if 閃避機率 == 0:
+                print(f"{self.姓名}成功閃避 ~")
+                return 0
+            else:
+                print(f"{self.姓名}閃避失敗 ~")
+            return 1
+
+class 戰士(遊戲角色):
+    def 攻擊(self, 指令):
+        if 指令 == 1:
+            print(f"{self.姓名}使出突刺攻擊!")
+            return 200
+        elif 指令 == 2:
+            print(f"{self.姓名}奮力使出迴旋揮砍")
+            return  random.choice([300, 100])
+
+
+class 魔物(遊戲角色):
+    def 攻擊(self, 指令):
+        if 指令 == 1:
+            print(f"{self.姓名}使出利爪攻擊!")
+            return 180
+        elif 指令 == 2:
+            print(f"{self.姓名}張口使用毒液")
+            return  random.choice([320, 100])
+
+
+玩家姓名 = input("請輸入角色名稱: ")
+玩家 = 戰士(玩家姓名)
+敵方 = 魔物("哥布林")
+
+while True:
+
+    隨機 = random.choice([1, 2])
+
+    玩家指令 = int(input("請輸入您的攻擊指令 (1)普通攻擊 (2)特殊攻擊 :"))
+    玩家攻擊力 = 玩家.攻擊(玩家指令)
+    扣血 = int(敵方.防禦(隨機) * 玩家攻擊力)
+    敵方.生命 -= 扣血
+
+    if 敵方.生命 <= 0:
+        print(f"{敵方.姓名}倒下了，{玩家.姓名}勝利!!")
+        break
+    else:
+        print(f"{敵方.姓名}受到了{扣血}傷害! 生命值剩下{敵方.生命}")
+        print("")
+
+    防禦指令 = int(input("請輸入您的防禦指令 (1)格擋 (2)閃避 :"))
+    敵方攻擊力 = 敵方.攻擊(防禦指令)
+    損血 = int(玩家.防禦(隨機) * 敵方攻擊力)
+    玩家.生命 -= 扣血
+
+    if 敵方.生命 <= 0:
+        print(f"{玩家.姓名}受傷過重，遊戲結束!!")
+        break
+    else:
+        print(f"{玩家.姓名}受到了{損血}傷害! 生命值剩下{玩家.生命}")
+        print("")
